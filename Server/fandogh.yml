@@ -1,0 +1,10 @@
+kind: ExternalService
+name: !!python/unicode 'test'
+spec:
+  image_pull_policy: Always
+  port: 80
+  source:
+    context: .
+    !!python/unicode 'dll_name': !!python/unicode 'Server.dll'
+    !!python/unicode 'dotnet_version': !!python/unicode '5.0'
+    project_type: !!python/unicode 'aspnetcore'
