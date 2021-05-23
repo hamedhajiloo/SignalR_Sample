@@ -8,16 +8,19 @@ namespace Client
     {
         static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            var text = Console.ReadLine();
-            await ConnectToHubAsync(text);
+            while (true)
+            {
+                Console.Write("Insert message: ");
+                var text = Console.ReadLine();
+                await ConnectToHubAsync(text);
+            }
         }
 
         static async Task ConnectToHubAsync(string text)
         {
             bool started = false;
             HubConnection connection = new HubConnectionBuilder()
-               .WithUrl("https://localhost:5001/myhub")
+               .WithUrl("https://test-hamedhajiloo.fandogh.cloud/myhub")
                .Build();
 
             connection.Closed += async (error) =>
