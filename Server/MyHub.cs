@@ -18,9 +18,9 @@ namespace Server
             return base.OnDisconnectedAsync(exception);
         }
 
-        public async Task SendMessage(string message)
+        public void SendMessage(string message)
         {
-            await Clients.All.SendAsync("Test", message);
+            HubArtifact.Messages.Add(message);
         }
     }
 }
