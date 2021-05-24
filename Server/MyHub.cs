@@ -10,11 +10,13 @@ namespace Server
     {
         public override Task OnConnectedAsync()
         {
+            HubArtifact.OnlineUserCount++;
             return base.OnConnectedAsync();
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
+            HubArtifact.OnlineUserCount--;
             return base.OnDisconnectedAsync(exception);
         }
 

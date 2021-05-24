@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +25,23 @@ namespace Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddSignalR();
+            services.AddSignalR(opt =>
+            {
+                opt.ClientTimeoutInterval = TimeSpan.MaxValue;
+                opt.KeepAliveInterval = TimeSpan.MaxValue;
+                opt.EnableDetailedErrors = true;
+                opt.MaximumParallelInvocationsPerClient = int.MaxValue;
+                opt.MaximumReceiveMessageSize = long.MaxValue;
+                opt.StreamBufferCapacity = int.MaxValue;
+            });
+            services.AddCors(opt => opt.AddDefaultPolicy(builder =>
+            {
+                builder
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+            }));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +69,13 @@ namespace Server
             {
                 endpoints.MapRazorPages();
                 endpoints.MapHub<MyHub>("/myhub");
+            });
+            app.Map($@"/test", innerAspNetCoreApp =>
+            {
+                innerAspNetCoreApp.Run(async cntx =>
+                {
+                    await cntx.Response.WriteAsync("Hello world");
+                });
             });
         }
     }
